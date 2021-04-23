@@ -47,21 +47,21 @@ public class ReplyServiceImpl implements ReplyService {
 	public int write(ReplyVO vo) throws Exception {
 		// TODO Auto-generated method stub
 		log.info("write().vo : " + vo );
-		return 0;
+		return mapper.write(vo);
 	}
 
 	@Override
 	public int update(ReplyVO vo) throws Exception {
 		// TODO Auto-generated method stub
 		log.info("update().vo : " + vo );
-		return 0;
+		return mapper.update(vo);
 	}
 
 	@Override
 	public int delete(ReplyVO vo) throws Exception {
 		// TODO Auto-generated method stub
 		log.info("delete().vo : " + vo );
-		return 0;
+		return mapper.delete(vo);
 	}
 
 }
