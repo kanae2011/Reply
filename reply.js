@@ -22,6 +22,7 @@ var replyService = (
 			
 			//Ajax를 이용한 데이터 가져오기 -> 형식에 맞으면 Ajax 사용 
 			//Ajax 함수 : $.getJSON() - $.ajax() 통해서 JSON 데이터를 받아오게 만든 함수 
+			//			$(selector).load(url[,success])-아이디 중복체크 시 사용
 			$.getJSON(
 				//ajax로 호출하는 URL
 				"/replies/list.do?no=" + no + "&replyPage=" + page + "&replyPerPageNum" + perPageNum,
