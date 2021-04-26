@@ -47,3 +47,86 @@
  		return dateToTimeStr(new Date(timeStemp));
  	else return dateToDateStr(new Date(timeStemp),".");	
  	}
+
+ 	//ajax를 이용한 댓글이나 게시판의 글 목록의 페이지 네이션 만들기 (li tag)
+ 	//데이터 한개 당 li - a - data. 선택된 페이지는 class="active"로 지정 / 모든 태그에 class= "ajax_page"
+ 	//넘어오는 데이터는 pageObject = {"page":1 "perPageNum":5...} : JSON -> pageObject.page
+ 	//결과는 페이지 네이션의 ul tag 안에 들어갈 li 태그들을 문자열로 넘겨줌 
+ 	function ajaxPage(pageObject){
+		var str = ""; // tag를 만들어서 저장할 변수 
+		
+		//1 페이지로 이동시키는 버튼
+		str += "<li data-page='1' class='reply_nav_li'>";
+		if(pageObject.page > 1){ // 이동 시킴 
+			str += "<a href= '' onclick='return false'class='move'"
+			+ " title='click to move first page!'data-toggle='tooltip' data-placement='top'>";
+			str += "<i class='glyphicon glyphicon-fast-backward' ></i>";
+		  	str += "</a>";	
+	  	}
+	  	else{ //page <= 1 이동시키지 않음 
+			str += "<a href='' onclick='return false'";
+			str += "'title= 'no move page!' data-toggle ='tooltip' data-placement='top'>";
+			str += "<i class='glyphicon glyphicon-fast-backward' style='color:#999;'></i>";
+			str += "</a>";
+	} 
+		str += "</li>";
+	  	
+	  	//이전 그룹의 페이지로 이동시키기 	
+	  	str += "<li data-page='" + (pageObject.startPage -1)  + "'class='reply_nav_li'>";
+	  	if(pageObject.startPage > 1){
+			str += "<a href=''title='click to move previous page group!' class='move'"
+			+ "data-toggle='tooltip' data-placement='top' >";
+			str += "<i class='glyphicon glyphicon-step-backward'></i>";
+			str += "</a>";
+	}else{ //page <=1
+			str += "<a href='' onclick='return false'";
+			str += " title='no move page!' data-toggle='tooltip' data-placement='top' >";
+			str += "<i class='glyphicon glyphicon-step-backward' style='color: #999;'></i>";
+			str += "</a>";
+	}
+	  	str += "</li>";
+	  	
+	  	//startPage~endPage 버튼 만들기
+	  	for(i = pageObject.startPage ; i <= pageObject.endPage; i++){
+			str += "<li data-page = '" + i + "' class='reply_nav_li ";
+		if(pageObject.page == i) str += "active ";
+			str += "'>";
+		if(pageObject.page == i) str += "<a href='onclick='return false'>" + i + "</a>";
+		else str += "<a href='' title='click to move" + i + "page'class='move'"
+			+ "data-toggle='tooltip' data-placement='top'>" + i + "</a>";
+		str += "</li>";
+		}
+		
+	   // 다음 그룹으로 이동 : page를 endPage + 1로 이동시킴 / endPage == totalPage 이동 불가.
+        str += "<li data-page= '" + (pageObject.endPage + 1) + "' class='reply_nav_li'>";
+      	if(pageObject.endPage < pageObject.totalPage){ // endPage가 != totalPage 이므로 이동 가능
+	        str += "<a href=''title='click to move next page group!' "  + "data-toggle='tooltip'class='move' data-placement='top'>";
+	        str += "<i class='glyphicon glyphicon-step-forward'></i>";
+	        str += "</a>";
+        } else {
+	        str += "<a href='' onclick='return false'";
+	        str += "title='no move page!'" + "data-toggle='tooltip' data-placement='top' >";
+	        str += "<i class='glyphicon glyphicon-step-forward' style='color: #999;'></i>";
+	        str += "</a>";
+        str += "</li>";
+   
+   }
+   	   // 마지막 페이지로 이동 : totalPage로 이동시킨다. page == totalPage 이면 이동 불가
+	  	str += "<li data-page= '"+ pageObject.totalPage +"' class='reply_nav_li'>";
+	  	if(pageObject.page < pageObject.totalPage){
+			str +=	"<a href='' title='click to move next lase page!' data-toggle='tooltip'"
+				+ " class='move' data-placement='top'>";
+			str += "<i class='glyphicon glyphicon-fast-forward'></i>";
+			str += "</a>";
+		}else{
+		  	str += "<a href='' onclick='return false'";
+			str += "title='no move page!' data-toggle='tooltip' data-placement='top' >";
+			str += "<i class='glyphicon glyphicon-fast-forward' style='color: #999;'></i>";
+			str += "</a>";
+		}
+	  	str += "</li>";
+   	   
+	  
+		return str;
+		}
+ 	
