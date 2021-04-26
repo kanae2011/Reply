@@ -40,6 +40,9 @@ $(function(){
 	   
 	   ${(empty msg)?"":"alert('"+= msg +="');"}
 	   
+	   // tooltip 
+//	   $('[data-toggle="tooltip"]').tooltip();
+	   
 //모달 안에 있는 삭제 버튼 이벤트
 $("#modal_deleteBtn").click(function () {
 	alert("modal 삭제");
@@ -66,13 +69,21 @@ function showList() {
 		//서버에 넘겨 줄 데이터
 		{no:no,replyPage:replyPage,replyPerPageNum:replyPerPageNum},
 		//성공 했을 때의 함수 -> data라는 이름으로 list가 들어옴 (순서가 중요)
-		function(list){
+//		function(list){
+		function(data){
+			//list데이터 확인
+			//data데이터 확인->JSON데이터:[object Object]
+// 			alert(data);
+//			alert(JSON.stringify(data));
+			var list = data.list;
+//		return; // 데이터만 확인하고 처리는 하지 않도록 하기 위해서 
+		
 			var str = "";
 			//li태그 만들기
 			//데이터가 없을때의 처리
 			if(!list || list.length == 0){
 				//alert("데이터 없음");
-				str += "<li>댓글이 존재하지 않습니다.</li>"
+				str += "<li>댓글이 존재하지 않습니다.</li>";
 				
 			}else{//데이터가 없을때의 처리
 				//alert("데이터 있음");
@@ -96,8 +107,13 @@ function showList() {
 				str += "</li>";
 				}
 			}
-			replyUL.html(str);
-		});
+			replyUL.html(str); //댓글 목록 데이터 표시 
+			//댓글의 페이지네이션 표시
+			var pageObject = data.pageObject; //서버에서 넘어오는 데이터에서 pageObject 꺼냄 
+			var str = ajaxPage(pageObject);
+// 			alert(str);
+			$("#reply_nav").html(str);
+		});//function(data)의 끝
 }//end of show list
 
 //댓글 모달창의 전역변수
@@ -290,7 +306,23 @@ $("#replyModalDeleteBtn").click(function () {
 	replyModal.modal("hide");
 
 });
-});
+	//댓글의 페이지 번호 클릭 이벤트 처리 - 태그가 나중에 나옴 그래서 on()사용
+	//$(원래 있었던 객체 선택).on(이벤트,새로 만들어진 태그,실행함수)
+	$("#reply_nav").on("click",".reply_nav_li",function(){
+//		alert("클릭");
+		//this -> li / move 클래스 li-a에 작성해둠
+		if($(this).find("a").hasClass("move")){
+//		alert("페이지 이동");
+			replyPage = $(this).data("page");
+//			alert( replyPage + "페이지 이동");
+		showList();
+		}else{
+			alert("이동시키지 않음");
+		}return false;
+	});
+	
+
+}); // 끝 
 
 </script>
 
@@ -425,8 +457,17 @@ div {
 			    	</li>
 			    </ul>
 		    </div>
+	<!-- 댓글 panel-body의 끝 -->
+	<div class="panel-footer">
+	<ul class="pagination" id="reply_nav">
+	  <li><a href="">1</a></li>
+	  <li class="disabled"><a href="">2</a></li>
+	  
+	</ul>
 		</div>
 	</div>
+	</div>
+	<!-- 댓글 panel의 끝 -->
 </div>
 <!-- 댓글의 끝 -->
 </div>
