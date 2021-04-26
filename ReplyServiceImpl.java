@@ -28,6 +28,8 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	public List<ReplyVO> list(PageObject pageObject,Long no) throws Exception {
 		// TODO Auto-generated method stub
+		//게시판 글번호에 맞는 전체 데이터 갯수 가져오기
+		pageObject.setTotalRow(mapper.getTotalRow(no));
 		log.info("list().pageObject : " + pageObject + ", no : " + no );
 		//MyBatis에서 파라메터로 한 개만 받으므로 하나로 합쳐줌 
 		Map<String, Object>map = new HashMap<String, Object>();
