@@ -14,7 +14,7 @@ public interface ReplyMapper {
 	public List<ReplyVO>list(Map<String, Object>map) throws Exception;
 	
 	//1-1.댓글 전체 데이터 가져오기-페이지 처리(화면에 보여주는 페이지네이션)
-	public Long getTotalRow() throws Exception;
+	public Long getTotalRow(Long no) throws Exception;
 	
 	//2.댓글보기 생략- 목록에 다 표시되어 있으므로 
 	
