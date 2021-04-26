@@ -1,6 +1,8 @@
 package org.zerock.board.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,16 +42,22 @@ public class ReplyController {
 					MediaType.APPLICATION_JSON_UTF8_VALUE})
 	
 	// ResponseEntity : 실행 상태 코드와 함께 실행결과를 클라이언트에서 전달 할 때 사용하는 객체 
-	public ResponseEntity<List<ReplyVO>> list(
+		public ResponseEntity<Map<String,Object>>list(
+	//	public ResponseEntity<List<ReplyVO>> list(
 			@RequestParam(defaultValue =  "1") long replyPage,
 			@RequestParam(defaultValue =  "5")long replyPerPageNum,
 			Long no) throws Exception {
-		
+		Map<String,Object>map = new HashMap<>();
 		//댓글에 대한 페이지 정보
 		PageObject replyPageObject = new PageObject(replyPage,replyPerPageNum);
 		log.info("list().replyPageObject : " + replyPageObject + "......");
 		
-		return new ResponseEntity<>(service.list(replyPageObject, no), HttpStatus.OK);
+		map.put("pageObject", replyPageObject);
+		map.put("list", service.list(replyPageObject, no));
+		
+		return new ResponseEntity<>(map,HttpStatus.OK);
+		
+//		return new ResponseEntity<>(service.list(replyPageObject, no), HttpStatus.OK);
 	      // /WEB-INF/views + /board/list + .jsp -> servlet-context.xml 정보
 		
 	}
